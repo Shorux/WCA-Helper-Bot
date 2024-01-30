@@ -1,10 +1,14 @@
 SQLALCHEMY_URL = 'sqlite+aiosqlite:///bot/database/db.sqlite3'
 
-
-stat_string = '''WCA ID: {wca_id}, Имя: {}
+stat_string = '''**Имя**: {name}, **WCA ID**: {wca_id}
+**Рекорды**: 
+    WR:{wrs}, CR:{crs}, NR:{nrs}
+**Медали**:
+    🥇:{gold}, 🥈:{silver}, 🥉{bronze}
+**Личные рекорды**:{personal_records}
 '''
 
-_s = {
+_ = {
     'please_set_wcaid': '''**Вам нужно зарегестрировать ваш WCA ID**\
                             с помощью команды:\
                             !set your_wca_id\

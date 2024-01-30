@@ -5,7 +5,7 @@ from aiogram.filters import Command, CommandStart
 from bot.database.models import User
 from bot.database.requests import create_user, get_user, update_wca_id
 
-from config import _s
+from config import _
 from bot.wca_requests import parsed_wca_profile, get_wca_profile
 
 
@@ -18,9 +18,9 @@ async def greetings(message: Message):
     user = await get_user(user_id)
 
     if user and user.wca_id:
-        res_msg = _s['statistic'].format(**(await parsed_wca_profile(user.wca_id)))
+        res_msg = _['statistic'].format(**(await parsed_wca_profile(user.wca_id)))
     else:
-        res_msg = _s['please_set_wcaid']
+        res_msg = _['please_set_wcaid']
 
     await message.reply(res_msg)
 
