@@ -21,8 +21,9 @@ async def greetings(message: Message):
         res_msg = _s['statistic'].format(**(await parsed_wca_profile(user.wca_id)))
     else:
         res_msg = _s['please_set_wcaid']
-    
+
     await message.reply(res_msg)
+
 
 @router.message(Command('set', prefix='/!'))
 async def hello_handler(message: Message):
@@ -36,4 +37,3 @@ async def hello_handler(message: Message):
     else:
         user = User(user_id=user_id, wca_id=wca_id)
         await create_user(user_id, )
-        

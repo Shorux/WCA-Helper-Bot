@@ -11,6 +11,7 @@ async def create_user(user: User) -> User:
 
     return user
 
+
 async def get_user(user_id: int) -> User:
     async with async_session() as session:
         statement = select(User).where(User.user_id == user_id)
@@ -18,9 +19,11 @@ async def get_user(user_id: int) -> User:
 
     return user
 
+
 async def update_wca_id(user_id: int, wca_id: str) -> User:
     async with async_session() as session:
-        statement = update(User).where(User.user_id == user_id).values(wca_id=wca_id)
+        statement = update(User).where(
+            User.user_id == user_id).values(wca_id=wca_id)
 
         await session.execute(statement)
         await session.commit()
