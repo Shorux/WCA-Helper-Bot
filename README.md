@@ -11,6 +11,11 @@
 Это бот для телеграм.
 
 Он помогает [спидкуберам](https://www.youtube.com/watch?v=1oZY2e25VUw&t=10s, 'Кто такие спидкуберы?') следить за своими официальными результатами по спидкубингу из сайта [WorldCubingAssociation](https://www.worldcubeassociation.org/)
+
+Мой профиль в сайте WCA (кликните на фото):
+
+[<img src="https://avatars.worldcubeassociation.org/uploads/user/avatar/2021TOLI01/1689360886.jpg" width="300" border=1px/>](https://www.worldcubeassociation.org/persons/2021TOLI01)
+
 ## Как запустить код?
 Сперва создаём файлик `.env` в главном каталоге.
 
