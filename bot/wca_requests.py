@@ -2,12 +2,8 @@ from pprint import pprint
 import aiohttp
 import asyncio
 
-
+from config import _
 BASE_URL = 'https://www.worldcubeassociation.org/api/v0'
-
-pr = '''
-        {type} 🫴  *{best}* ⚡️
-            NR: {country_rank}, CR: {continent_rank}, WR: {world_rank}'''
 
 
 def get_time(mils: int) -> str:
@@ -32,6 +28,7 @@ def set_res(res, k):
 
 
 def get_prs(prs: dict) -> str:
+    pr = _['personal_record']
     prs_string = ''
 
     for k, v in prs.items():
@@ -54,18 +51,25 @@ def get_prs(prs: dict) -> str:
     return prs_string
 
 
-async def get_wca_profile(wca_id: str) -> dict:
+async def get_photo(url: str) -> bytes:
+    async with aiohttp.request('get', url) as session:
+        return await session.read()
+
+
+async def get_wca_profile(wca_id: str) -> dict | None:
     async with aiohttp.request('get', BASE_URL+f'/persons/{wca_id}') as session:
         res = await session.json()
 
-        return res if not res.get('error') else None
+        if res.get('error'):
+            return None
+
+        res['photo_url'] = res['person']['avatar']['url']
+
+        return res 
 
 
-async def parsed_wca_profile(wca_id: str) -> dict:
-    profile = await get_wca_profile(wca_id)
-    # pprint(profile, indent=4)
-    if not profile:
-        return None
+async def parsed_wca_profile(profile: dict) -> dict:
+    profile.pop('photo_url')
 
     person = profile.get('person')
     records = profile.get('records')
@@ -83,9 +87,5 @@ async def parsed_wca_profile(wca_id: str) -> dict:
         'bronze': medals['bronze'],
         'personal_records': personal_records
     }
-    pprint(data, indent=4)
+
     return data
-
-
-if __name__ == '__main__':
-    asyncio.run(parsed_wca_profile('2018TAKH01'))
