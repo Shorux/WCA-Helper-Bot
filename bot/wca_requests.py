@@ -6,9 +6,8 @@ import asyncio
 BASE_URL = 'https://www.worldcubeassociation.org/api/v0'
 
 pr = '''
-    *{type}* 🫴 {best}
-        Место в рейтинге👇
-            WR:{world_rank}, CR:{continent_rank}, NR:{country_rank}'''
+        {type} 🫴  *{best}* ⚡️
+            NR: {country_rank}, CR: {continent_rank}, WR: {world_rank}'''
 
 
 def get_time(mils: int) -> str:
@@ -22,7 +21,6 @@ def get_time(mils: int) -> str:
 
     return time_str
 
-print(get_time(890320800)) #3196800
 
 def set_res(res, k):
     if k == '333fm':
@@ -37,7 +35,7 @@ def get_prs(prs: dict) -> str:
     prs_string = ''
 
     for k, v in prs.items():
-        string = f'\n**Дисциплина {k}**:'
+        string = f'🍼*Дисциплина {k}*:'
         avg = v.get('average')
         single = v.get('single')
 
@@ -51,7 +49,7 @@ def get_prs(prs: dict) -> str:
             single['best'] = set_res(single['best'], k)
             string += pr.format(**single)
 
-        prs_string += string
+        prs_string += string + '\n\n'
 
     return prs_string
 
