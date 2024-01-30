@@ -5,7 +5,7 @@ from aiogram.filters import Command, CommandStart
 from bot.database.models import User
 from bot.database.requests import create_user, get_user, update_wca_id
 
-from bot.strings import _s
+from config import _s
 from bot.wca_requests import parsed_wca_profile, get_wca_profile
 
 

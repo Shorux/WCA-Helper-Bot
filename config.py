@@ -1,6 +1,8 @@
+SQLALCHEMY_URL = 'sqlite+aiosqlite:///bot/database/db.sqlite3'
+
+
 stat_string = '''WCA ID: {wca_id}, Имя: {}
 '''
-
 
 _s = {
     'please_set_wcaid': '''**Вам нужно зарегестрировать ваш WCA ID**\
