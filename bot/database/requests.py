@@ -15,7 +15,7 @@ async def create_user(user: User) -> User:
 async def get_user(user_id: int) -> User:
     async with async_session() as session:
         statement = select(User).where(User.user_id == user_id)
-        user = (await session.execute(statement)).fetchone()
+        user = (await session.execute(statement)).scalar()
 
     return user
 
