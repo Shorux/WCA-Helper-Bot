@@ -16,7 +16,7 @@
 
 [<img src="https://avatars.worldcubeassociation.org/uploads/user/avatar/2021TOLI01/1689360886.jpg" width="300" border=1px/>](https://www.worldcubeassociation.org/persons/2021TOLI01)
 
-## Как запустить код?
+## Как запустить бота?
 Сперва создаём файлик `.env` в главном каталоге.
 
 Внутри этого файла пишем:
