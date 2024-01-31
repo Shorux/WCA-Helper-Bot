@@ -1,8 +1,0 @@
-# Files
-.env
-*.sqlite3
-.gitignore
-
-# Directories
-__pycache__/
-.venv/
