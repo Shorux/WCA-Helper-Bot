@@ -1,4 +1,4 @@
-import aiohttp
+from aiohttp import ClientSession
 
 from config import _
 
@@ -39,11 +39,14 @@ def set_res(res, event):
         return get_time(res)
 
 
-def get_prs(prs: dict) -> str:
+def get_prs(prs: dict, events: list = None) -> str:
     pr = _['personal_record']
     prs_string = ''
 
     for k, v in prs.items():
+        if events and k not in events:
+            continue
+
         string = f'🍼*Дисциплина {k}*:'
         avg = v.get('average')
         single = v.get('single')
@@ -63,23 +66,11 @@ def get_prs(prs: dict) -> str:
     return prs_string
 
 
-async def get_wca_profile(wca_id: str) -> dict | None:
-    async with aiohttp.request('get', BASE_URL+f'/persons/{wca_id}') as session:
-        res = await session.json()
-
-        if res.get('error'):
-            return None
-
-        res['photo_url'] = res['person']['avatar']['url']
-
-        return res
-
-
-async def parsed_wca_profile(profile: dict) -> dict:
+def parsed_wca_profile(profile: dict, events: list = None) -> dict:
     person = profile.get('person')
     records = profile.get('records')
     medals = profile.get('medals')
-    personal_records = get_prs(profile.get('personal_records'))
+    personal_records = get_prs(profile.get('personal_records'), events)
 
     data = {
         'name': person['name'],
@@ -94,3 +85,16 @@ async def parsed_wca_profile(profile: dict) -> dict:
     }
 
     return data
+
+
+async def get_wca_profile(wca_id: str) -> dict | None:
+    async with ClientSession(trust_env=True) as session:
+        async with session.request('get', BASE_URL+f'/persons/{wca_id}') as resp:
+            res = await resp.json()
+
+            if res.get('error'):
+                return None
+
+            res['photo_url'] = res['person']['avatar']['url']
+
+            return res

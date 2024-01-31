@@ -6,7 +6,7 @@ from config import _
 from apiwca.wca_requests import get_wca_profile
 
 from bot.database.models import User
-from bot.helpers import send_statistic, del_msg
+from bot.helpers import send_statistic, del_msg, check_events
 from bot.database.requests import create_user, get_user, update_wca_id
 
 
@@ -36,7 +36,13 @@ async def hello_handler(message: Message):
         return await del_msg(message)
 
     if message.text.startswith('/get'):
-        await send_statistic(message, wca_id=wca_id)
+        events = None
+        try:
+            events = check_events(message.text.split()[2:])
+        except:
+            pass
+        
+        await send_statistic(message, wca_id=wca_id, events=events)
     elif message.text.startswith('/set'):
         profile = await get_wca_profile(wca_id)
 
@@ -59,11 +65,18 @@ async def hello_handler(message: Message):
 
 @router.message(Command('me', prefix='/'))
 async def get_me(message: Message):
+    events = None
+    try:
+        events = check_events(message.text.split()[1:])
+    except:
+        pass
+    print('handler', events)
+
     user_id = message.from_user.id
     user = await get_user(user_id)
 
     if user and user.wca_id:
-        await send_statistic(message, wca_id=user.wca_id)
+        await send_statistic(message, wca_id=user.wca_id, events=events)
     else:
         msg = await message.reply(_['please_set_wcaid'])
 
