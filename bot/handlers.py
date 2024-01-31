@@ -3,8 +3,9 @@ from aiogram.types import Message
 from aiogram.filters import Command, CommandStart
 
 from config import _
+from apiwca.wca_requests import get_wca_profile
+
 from bot.database.models import User
-from bot.wca_requests import get_wca_profile
 from bot.helpers import send_statistic, del_msg
 from bot.database.requests import create_user, get_user, update_wca_id
 
