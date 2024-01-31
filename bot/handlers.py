@@ -12,9 +12,6 @@ from bot.database.requests import create_user, get_user, update_wca_id
 router = Router()
 
 
-
-
-
 @router.message(CommandStart())
 async def greetings(message: Message):
     user_id = message.from_user.id
