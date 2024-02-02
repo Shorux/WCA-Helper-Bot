@@ -13,9 +13,11 @@ def get_time(mils: int) -> str:
     seconds, mils = divmod(mils, 1000)
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
-
-    time_str = f"{minutes}:" if minutes > 0 else ""
-    time_str += f"{seconds:02d}.{mils_str}"
+    
+    
+    if minutes > 0:
+        time_str = f"{minutes}:{seconds:02d}.{mils_str}"
+    time_str = f"{seconds}.{mils_str}"
 
     return time_str
 
