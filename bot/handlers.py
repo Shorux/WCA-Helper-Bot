@@ -5,9 +5,9 @@ from aiogram.filters import Command, CommandStart
 from config import _
 from apiwca.wca_requests import get_wca_profile
 
-from bot.database.models import User
+from bot.database.requests import DB
+from bot.database.models import User as UserMd
 from bot.helpers import send_statistic, del_msg, check_events
-from bot.database.requests import create_user, get_user, update_wca_id
 
 
 router = Router()
@@ -16,7 +16,7 @@ router = Router()
 @router.message(CommandStart())
 async def greetings(message: Message):
     user_id = message.from_user.id
-    user = await get_user(user_id)
+    user = await (await DB()).get(user_id)
 
     if user and user.wca_id:
         await send_statistic(message, wca_id=user.wca_id)
@@ -52,13 +52,13 @@ async def hello_handler(message: Message):
             return await del_msg(message)
         
         user_id = message.from_user.id
-        user = await get_user(user_id)
+        user = await (await DB()).get(user_id)
         
         if user:
-            await update_wca_id(user_id, wca_id)
+            await (await DB()).update_wca_id(user_id, wca_id)
         else:
-            user = User(user_id=user_id, wca_id=wca_id)
-            await create_user(user)
+            user = UserMd(user_id=user_id, wca_id=wca_id)
+            await (await DB()).create(user)
         
         await message.reply(_['register_wcaid'])
 
@@ -73,7 +73,7 @@ async def get_me(message: Message):
     print('handler', events)
 
     user_id = message.from_user.id
-    user = await get_user(user_id)
+    user = await (await DB()).get(user_id)
 
     if user and user.wca_id:
         await send_statistic(message, wca_id=user.wca_id, events=events)
