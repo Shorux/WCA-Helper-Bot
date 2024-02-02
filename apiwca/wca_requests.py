@@ -1,5 +1,9 @@
+import emoji
+import asyncio
+
 from aiohttp import ClientSession
 
+from pprint import pprint
 from config import _
 
 
@@ -45,22 +49,22 @@ def get_prs(prs: dict, events: list = None) -> str:
     pr = _['personal_record']
     prs_string = ''
 
-    for k, v in prs.items():
-        if events and k not in events:
+    for event, v in prs.items():
+        if events and event not in events:
             continue
 
-        string = f'🍼*Дисциплина {k}*:'
+        string = _['event'].format(event=event)
         avg = v.get('average')
         single = v.get('single')
 
         if avg:
             avg['type'] = 'Average'
-            avg['best'] = set_res(avg['best'], k)
+            avg['best'] = set_res(avg['best'], event)
             string += pr.format(**avg)
 
         if single:
             single['type'] = 'Single'
-            single['best'] = set_res(single['best'], k)
+            single['best'] = set_res(single['best'], event)
             string += pr.format(**single)
 
         prs_string += string + '\n\n'
@@ -88,10 +92,40 @@ def parsed_wca_profile(profile: dict, events: list = None) -> dict:
 
     return data
 
+# finded_users = '👥Найденные спидкуберы:\n'
+
+# user_str = '''{gender}Имя: {name}
+#     🏳️Страна: {country}{country_emoji}
+#     🆔WCA ID: {wcaid}\n\n'''
+
+def parsed_users(users: list[dict]) -> str:
+    users_str = _['finded_users']
+
+    for user in users:
+        gender = user.get('gender')
+        gender = '🧑' if gender == 'm' else '👩'
+        country = user.get('country')
+
+        if not country:
+            country = user.get('country_iso2')
+        else:
+            country = country.get('name')
+
+        data = {
+            'name': user['name'],
+            'wcaid': user['wca_id'],
+            'gender': gender,
+            'country': country
+        }
+
+        users_str += _['user'].format(**data)
+    
+    return users_str
+
 
 async def get_wca_profile(wca_id: str) -> dict | None:
     async with ClientSession(trust_env=True) as session:
-        async with session.request('get', BASE_URL+f'/persons/{wca_id}') as resp:
+        async with session.get(BASE_URL+f'/persons/{wca_id}') as resp:
             res = await resp.json()
 
             if res.get('error'):
@@ -100,3 +134,21 @@ async def get_wca_profile(wca_id: str) -> dict | None:
             res['photo_url'] = res['person']['avatar']['url']
 
             return res
+
+
+async def search_users(query: str):
+    async with ClientSession(trust_env=True) as session:
+        params = {'q': query, 'persons_table': 'true'}
+        async with session.get(BASE_URL+f'/search/users', params=params) as resp:
+            res = (await resp.json()).get('result')
+
+            if len(res) > 10:
+                res = res[:10]
+                
+            return res
+    
+
+if __name__ == '__main__':
+    parsed_users(asyncio.run(search_users('alexey')))
+    asyncio.run(get_wca_profile('2021toli01'))
+    

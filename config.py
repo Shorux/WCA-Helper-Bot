@@ -17,6 +17,12 @@ _ = {
                 '🏆*Личные рекорды*:\n{personal_records}'),
     'personal_record': ('\n        {type} 🫴  *{best}* ⚡️\n'
                         '            NR: {country_rank}, CR: {continent_rank}, WR: {world_rank}'),
+    'event': '🍼*Дисциплина {event}*:',
+    'finded_users': '👥Найденные спидкуберы:\n',
+    'user': ('{gender}Имя: {name}\n'
+            '       🏳️Страна: {country}\n'
+            '       🆔WCA ID: {wcaid}\n\n'),
+    'not_found': 'Не найдено таких спидкуберов🍼',
     'wrong_wcaid': 'Неправильный WCA ID🍼',
     'register_wcaid': 'Зарегистрировал твой WCA ID🍼'
 }

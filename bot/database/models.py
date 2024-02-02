@@ -20,6 +20,9 @@ class User(Base):
     user_id = mapped_column(BigInteger, unique=True)
     wca_id: Mapped[str] = mapped_column(String(30))
 
+    def __repr__(self):
+        return f'User<{self.user_id}>'
+
 
 async def async_main():
     async with engine.begin() as conn:
