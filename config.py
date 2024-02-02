@@ -1,7 +1,7 @@
 SQLALCHEMY_URL = 'sqlite+aiosqlite:///bot/database/db.sqlite3'
 
 events_list = ('222', '333', '333fm', '333mbf', '333bf', '333oh', '444', '444bf'
-               '555', '555bf', '666', '777', 'clock', 'skweb', 'pyram', 'minx',
+               '555', '555bf', '666', '777', 'clock', 'skewb', 'pyram', 'minx',
                'sq1', '333ft')
 
 _ = {
