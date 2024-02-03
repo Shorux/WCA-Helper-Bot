@@ -22,83 +22,72 @@ async def greetings_handler(message: Message):
     if user and user.wca_id:
         await send_statistic(message, wca_id=user.wca_id)
     else:
-        msg = await message.reply(_['please_set_wcaid'])
-        await del_msg(msg)
-        return await del_msg(message)
+        await message.reply(_['please_set_wcaid'])
 
 
 @router.message(Command(commands=['get', 'set']))
 async def get_set_user_handler(message: Message):
-    db = await DB()
+    splited_msg = message.text.split()
 
     try:
-        wca_id = message.text.split()[1].upper()
+        wca_id = splited_msg[1].upper()
     except:
-        msg = await message.reply(_['wrong_wcaid'])
-        await del_msg(msg)
+        await del_msg(await message.reply(_['wrong_wcaid']))
         return await del_msg(message)
 
-    if message.text.startswith('/get'):
-        events = None
-        try:
-            events = check_events(message.text.split()[2:])
-        except:
-            pass
-        
-        await send_statistic(message, wca_id=wca_id, events=events)
-    elif message.text.startswith('/set'):
-        profile = await get_wca_profile(wca_id)
+    profile = await get_wca_profile(wca_id)
 
-        if not profile:
-            msg = await message.reply(_['wrong_wcaid'])
-            await del_msg(msg)
-            return await del_msg(message)
-        
-        user_id = message.from_user.id
-        user = await db.get(user_id)
-        
-        if user:
-            await db.update_wca_id(user_id, wca_id)
+    if message.text.startswith('/set'):
+        if profile:
+            db = await DB()
+            await db.update_wca_id(message.from_user.id, wca_id)
+
+            time = 600
+            msg = await message.reply(_['register_wcaid'])
         else:
-            user = UserMd(user_id=user_id, wca_id=wca_id)
-            await db.create(user)
-        
-        await message.reply(_['register_wcaid'])
+            time = 120
+            msg = await message.reply(_['wrong_wcaid'])
+
+        await del_msg(msg, time)
+        await del_msg(message, time)
+    elif message.text.startswith('/get'):
+        events = check_events(splited_msg[2:]) 
+
+        await send_statistic(message, profile, events=events)
 
 
 @router.message(Command('search'))
 async def search_users_handler(message: Message):
-    try:
-        query = ' '.join(message.text.split()[1:])
+    query = ' '.join(message.text.split()[1:])
 
-        if query:
-            users = await search_users(query)
-            resp = parsed_users(users)
-            await message.reply(resp)
-        else:
-            await del_msg(await message.reply(_['not_found']))
-    except:
-        pass
+    if query:
+        users = await search_users(query)
+        resp = parsed_users(users)
+
+        time = 600
+        msg = await message.reply(resp)
+    else:
+        time = 120
+        msg = await message.reply(_['not_found'])
+    
+    await del_msg(message, time)
+    await del_msg(msg, time)
 
 
 @router.message(Command('me'))
 async def get_me_handler(message: Message):
-    db = await DB()
-
-    events = None
-    try:
-        events = check_events(message.text.split()[1:])
-    except:
-        pass
-    print('handler', events)
-
+    events = check_events(message.text.split()[1:])
     user_id = message.from_user.id
+
+    db = await DB()
     user = await db.get(user_id)
 
     if user and user.wca_id:
-        await send_statistic(message, wca_id=user.wca_id, events=events)
+        msg = await send_statistic(message, wca_id=user.wca_id, events=events)
+        time = 600
     else:
         msg = await message.reply(_['please_set_wcaid'])
+        time = 120
 
-        await del_msg(msg)
-        await del_msg(message)
+    await del_msg(message, time)
+    await del_msg(msg, time)

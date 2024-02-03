@@ -25,10 +25,18 @@ class User():
         return user
 
     async def update_wca_id(self, user_id: int, wca_id: str) -> None:
-        statement = update(UserMd).where(UserMd.user_id == user_id).values(wca_id=wca_id)
+        statement = select(UserMd).where(UserMd.user_id == user_id)
+        user = (await self.session.execute(statement)).scalar()
+        
+        if user:
+            statement = update(UserMd).where(UserMd.user_id == user_id).values(wca_id=wca_id)
+            await self.session.execute(statement)
+        else:
+            user = UserMd(user_id=user_id, wca_id=wca_id)
+            self.session.add(user)
 
-        await self.session.execute(statement)
         await self.session.commit()
+        await self.session.refresh(user)
         await self.session.close()
 
     
