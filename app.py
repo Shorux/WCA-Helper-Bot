@@ -5,8 +5,8 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 
-from bot.database.models import async_main
 from bot.handlers import router
+from bot.database.models import async_main
 
 
 async def main():

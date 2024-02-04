@@ -1,6 +1,6 @@
-from sqlalchemy import String, BigInteger
+from sqlalchemy import BigInteger
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
-from sqlalchemy.ext.asyncio import AsyncAttrs, AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
 
 from config import SQLALCHEMY_URL
 
@@ -10,15 +10,14 @@ async_session = async_sessionmaker(engine, autoflush=False, autocommit=False)
 
 
 class Base(AsyncAttrs, DeclarativeBase):
-    pass
+    id: Mapped[int] = mapped_column(primary_key=True)
 
 
-class User(Base):
+class UserModel(Base):
     __tablename__ = 'users'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
     user_id = mapped_column(BigInteger, unique=True)
-    wca_id: Mapped[str] = mapped_column(String(30))
+    wca_id: Mapped[str] = mapped_column()
 
     def __repr__(self):
         return f'User<{self.user_id}>'

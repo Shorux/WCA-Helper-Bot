@@ -33,9 +33,9 @@ async def send_statistic(message: Message, profile: dict = None,
 
 
 async def del_msg(message: Message, time=120):
-    await asyncio.sleep(time)
     try:
         if message.chat.type == 'group' or message.chat.type == 'supergroup':
+            await asyncio.sleep(time)
             await message.delete()
     except:
         pass

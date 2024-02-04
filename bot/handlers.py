@@ -3,11 +3,9 @@ from aiogram.types import Message
 from aiogram.filters import Command, CommandStart
 
 from config import _
-from apiwca.wca_requests import get_wca_profile, parsed_users, search_users
-
 from .database.requests import DB
-from .database.models import User as UserMd
 from .helpers import send_statistic, del_msg, check_events
+from apiwca.wca_requests import get_wca_profile, parsed_users, search_users
 
 
 router = Router()
@@ -40,7 +38,7 @@ async def get_set_user_handler(message: Message):
     if message.text.startswith('/set'):
         if profile:
             db = await DB()
-            await db.update_wca_id(message.from_user.id, wca_id)
+            await db.create(message.from_user.id, wca_id)
 
             time = 600
             msg = await message.reply(_['register_wcaid'])
