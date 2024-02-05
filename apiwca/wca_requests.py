@@ -1,8 +1,7 @@
-import asyncio
+# import asyncio
 
 from aiohttp import ClientSession
 
-from pprint import pprint
 from config import _
 
 
@@ -86,18 +85,19 @@ def parsed_wca_profile(profile: dict, events: list = None) -> dict:
 
     return data
 
-# finded_users = '👥Найденные спидкуберы:\n'
-
-# user_str = '''{gender}Имя: {name}
-#     🏳️Страна: {country}{country_emoji}
-#     🆔WCA ID: {wcaid}\n\n'''
 
 def parsed_users(users: list[dict]) -> str:
     users_str = _['finded_users']
 
     for user in users:
         gender = user.get('gender')
-        gender = '🧑' if gender == 'm' else '👩'
+        if gender == 'm':
+            gender = '🧑'
+        elif gender == 'f':
+            gender = '👩'
+        else:
+            gender = '👤'
+            
         country = user.get('country')
 
         if not country:
@@ -142,7 +142,7 @@ async def search_users(query: str):
             return res
     
 
-if __name__ == '__main__':
-    parsed_users(asyncio.run(search_users('alexey')))
-    asyncio.run(get_wca_profile('2021toli01'))
+# if __name__ == '__main__':
+#     parsed_users(asyncio.run(search_users('alexey')))
+#     asyncio.run(get_wca_profile('2021toli01'))
     
