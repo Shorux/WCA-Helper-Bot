@@ -2,6 +2,7 @@ import asyncio
 from aiogram.types import Message
 
 from config import _, events_list
+from .filters.filters import is_group
 from apiwca.wca_requests import parsed_wca_profile, get_wca_profile
 
 
@@ -34,7 +35,7 @@ async def send_statistic(message: Message, profile: dict = None,
 
 async def del_msg(message: Message, time=120):
     try:
-        if message.chat.type == 'group' or message.chat.type == 'supergroup':
+        if is_group(message):
             await asyncio.sleep(time)
             await message.delete()
     except:
