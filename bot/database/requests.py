@@ -2,6 +2,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession 
 
 from .models import UserModel as UserMd
+from .models import ChatModel as ChatMd
 from .models import async_session
 
 
@@ -28,7 +29,40 @@ class User():
 
         return user
 
+
+class Chat():
+    def __init__(self, session):
+        self.session: AsyncSession = session
+
+    async def update(self, chat_id: int, lang: str = 'en') -> ChatMd:
+        async with self.session.begin():
+            statement = select(ChatMd).where(ChatMd.chat_id == chat_id)
+            chat = await self.session.execute(statement)
+            
+            if chat:
+                statement = update(ChatMd).where(ChatMd.chat_id == chat_id).values(lang=lang)
+                await self.session.execute(statement)
+            else:
+                chat = ChatMd(chat_id=chat_id, lang=lang)
+                self.session.add(chat)
+
+        return chat
+
     
-async def DB():
+    async def ln(self, chat_id: int) -> ChatMd.lang:
+        statement = select(ChatMd).where(ChatMd.chat_id == chat_id)
+        chat = (await self.session.execute(statement)).scalar()
+        await self.session.close()
+
+        return chat.lang if chat else 'en'
+    
+
+async def user_db():
     async with async_session() as session:
         return User(session)
+
+
+async def chat_db():
+    async with async_session() as session:
+        return Chat(session)
+    

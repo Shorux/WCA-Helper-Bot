@@ -23,6 +23,16 @@ class UserModel(Base):
         return f'User<{self.user_id}>'
 
 
+class ChatModel(Base):
+    __tablename__ = 'chats'
+
+    chat_id = mapped_column(BigInteger, unique=True)
+    lang: Mapped[str] = mapped_column(default='en')
+
+    def __repr__(self):
+        return f'User<{self.chat_id}>'
+
+
 async def async_main():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
