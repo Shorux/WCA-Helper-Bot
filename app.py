@@ -1,18 +1,14 @@
-import os
 import sys
 import logging
 import asyncio
 
-from aiogram import Bot, Dispatcher
 
 from bot.handlers import router
 from bot.database.models import async_main
+from dispatcher import bot, dp
 
 
 async def main():
-    bot = Bot(token=os.getenv('TOKEN'), parse_mode='MARKDOWN')
-    dp = Dispatcher()
-
     dp.include_router(router)
 
     await async_main()
