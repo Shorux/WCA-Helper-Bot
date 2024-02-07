@@ -10,7 +10,7 @@ class User():
     def __init__(self, session):
         self.session: AsyncSession = session
 
-    async def create(self, user_id: int, wca_id: str) -> UserMd:
+    async def create(self, user_id: int, wca_id: str):
         async with self.session.begin():
             statement = select(UserMd).where(UserMd.user_id == user_id)
             user = (await self.session.execute(statement)).scalar()
@@ -34,10 +34,11 @@ class Chat():
     def __init__(self, session):
         self.session: AsyncSession = session
 
-    async def update(self, chat_id: int, lang: str = 'en') -> ChatMd:
+    async def create(self, chat_id: int, lang: str = 'en'):
         async with self.session.begin():
             statement = select(ChatMd).where(ChatMd.chat_id == chat_id)
-            chat = await self.session.execute(statement)
+            resp = await self.session.execute(statement)
+            chat = resp.scalar()
             
             if chat:
                 statement = update(ChatMd).where(ChatMd.chat_id == chat_id).values(lang=lang)
@@ -45,11 +46,8 @@ class Chat():
             else:
                 chat = ChatMd(chat_id=chat_id, lang=lang)
                 self.session.add(chat)
-
-        return chat
-
     
-    async def ln(self, chat_id: int) -> ChatMd.lang:
+    async def get_lang(self, chat_id: int) -> ChatMd.lang:
         statement = select(ChatMd).where(ChatMd.chat_id == chat_id)
         chat = (await self.session.execute(statement)).scalar()
         await self.session.close()

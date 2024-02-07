@@ -1,5 +1,4 @@
-# import asyncio
-
+from pprint import pprint
 from aiohttp import ClientSession
 
 from config import _
@@ -38,15 +37,15 @@ def set_res(res, event):
     return get_time(res)
 
 
-def get_prs(prs: dict, events: list = None) -> str:
-    pr = _['personal_record']
+def get_prs(lang: str, prs: dict, events: list = None) -> str:
+    pr = _.personal_record[lang]
     prs_string = ''
 
     for event, v in prs.items():
         if events and event not in events:
             continue
 
-        string = _['event'].format(event=event)
+        string = _.event[lang].format(event=event)
         avg = v.get('average')
         single = v.get('single')
 
@@ -65,11 +64,26 @@ def get_prs(prs: dict, events: list = None) -> str:
     return prs_string
 
 
-def parsed_wca_profile(profile: dict, events: list = None) -> dict:
+def parsed_wca_profile(lang: str, profile: dict, events: list = None) -> dict:
     person = profile.get('person')
     records = profile.get('records')
     medals = profile.get('medals')
-    personal_records = get_prs(profile.get('personal_records'), events)
+    personal_records = get_prs(lang, profile.get('personal_records'), events)
+    gender = person.get('gender')
+
+    if gender == 'm':
+        gender = '🧑'
+    elif gender == 'f':
+        gender = '👩'
+    else:
+        gender = '👤'
+
+    country = person.get('country')
+
+    if not country:
+        country = person.get('country_iso2')
+    else:
+        country = country.get('name')
 
     data = {
         'name': person['name'],
@@ -80,14 +94,16 @@ def parsed_wca_profile(profile: dict, events: list = None) -> dict:
         'gold': medals['gold'],
         'silver': medals['silver'],
         'bronze': medals['bronze'],
+        'country': country,
+        'gender': gender,
         'personal_records': personal_records
     }
 
     return data
 
 
-def parsed_users(users: list[dict]) -> str:
-    users_str = _['finded_users']
+def parsed_users(lang, users: list[dict]) -> str:
+    users_str = _.finded_users[lang]
 
     for user in users:
         gender = user.get('gender')
@@ -112,7 +128,7 @@ def parsed_users(users: list[dict]) -> str:
             'country': country
         }
 
-        users_str += _['user'].format(**data)
+        users_str += _.user[lang].format(**data)
     
     return users_str
 
@@ -124,6 +140,7 @@ async def get_wca_profile(wca_id: str) -> dict | None:
 
             if res.get('error'):
                 return None
+            pprint(res, indent=4)
 
             res['photo_url'] = res['person']['avatar']['url']
 
