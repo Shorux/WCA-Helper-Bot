@@ -3,7 +3,7 @@ import logging
 import asyncio
 
 
-from bot.handlers import router
+from bot.handlers.handlers import router
 from bot.database.models import async_main
 from dispatcher import bot, dp
 
