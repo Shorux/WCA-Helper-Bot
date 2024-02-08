@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_
 from config import SQLALCHEMY_URL
 
 
-engine = create_async_engine(SQLALCHEMY_URL, echo=True)
+engine = create_async_engine(SQLALCHEMY_URL)
 async_session = async_sessionmaker(engine, autoflush=False, autocommit=False)
 
 
@@ -33,6 +33,6 @@ class ChatModel(Base):
         return f'User<{self.chat_id}>'
 
 
-async def async_main():
+async def init_database():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

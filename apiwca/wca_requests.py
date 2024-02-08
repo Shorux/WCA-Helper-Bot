@@ -1,7 +1,6 @@
-from pprint import pprint
 from aiohttp import ClientSession
 
-from config import _
+from bot.extra.strings import _
 
 
 BASE_URL = 'https://www.worldcubeassociation.org/api/v0'
@@ -130,6 +129,9 @@ def parsed_users(lang, users: list[dict]) -> str:
 
         users_str += _.user[lang].format(**data)
     
+    if lang == 'uz':
+        users_str += _.follow
+    
     return users_str
 
 
@@ -140,7 +142,6 @@ async def get_wca_profile(wca_id: str) -> dict | None:
 
             if res.get('error'):
                 return None
-            pprint(res, indent=4)
 
             res['photo_url'] = res['person']['avatar']['url']
 
@@ -148,6 +149,9 @@ async def get_wca_profile(wca_id: str) -> dict | None:
 
 
 async def search_users(query: str):
+    if not query:
+        return None
+    
     async with ClientSession(trust_env=True) as session:
         params = {'q': query, 'persons_table': 'true'}
         async with session.get(BASE_URL+f'/search/users', params=params) as resp:
@@ -157,9 +161,4 @@ async def search_users(query: str):
                 res = res[:10]
                 
             return res
-    
-
-# if __name__ == '__main__':
-#     parsed_users(asyncio.run(search_users('alexey')))
-#     asyncio.run(get_wca_profile('2021toli01'))
     

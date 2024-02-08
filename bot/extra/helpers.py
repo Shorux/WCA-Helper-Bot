@@ -1,9 +1,10 @@
 import asyncio
 from aiogram.types import Message
 
-from config import _, events_list
-from .filters.filters import is_group
-from .database.requests import Chat, async_session
+from .strings import _, events_list
+from bot.filters.filters import is_group
+from bot.database.requests import Chat
+from bot.database.models import async_session
 from apiwca.wca_requests import parsed_wca_profile, get_wca_profile
 
 
@@ -18,12 +19,15 @@ async def send_statistic(message: Message, profile: dict = None,
         await del_msg(message)
         return None
     
+    if events:
+        events = check_events(events)
+    
+    time = 600
     lang = await ln(message)
-    photo_url = profile.get('photo_url')
     data = parsed_wca_profile(lang, profile, events)
     res_msg = _.statistic[lang].format(**data)
-    time = 600
 
+    photo_url = profile.get('photo_url')
     if len(res_msg) < 1024:
         msg = await message.reply_photo(photo=photo_url, caption=res_msg)
     else:

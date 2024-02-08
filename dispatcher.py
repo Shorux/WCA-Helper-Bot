@@ -1,7 +1,7 @@
-import os
-
 from aiogram import Bot, Dispatcher
 
+from config import BOT_TOKEN
 
-bot = Bot(token=os.getenv('TOKEN'), parse_mode='MARKDOWN')
+
+bot = Bot(token=BOT_TOKEN, parse_mode='MARKDOWN')
 dp = Dispatcher()

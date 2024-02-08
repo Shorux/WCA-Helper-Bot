@@ -2,12 +2,13 @@ from aiogram import F, Router
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, CommandStart
 
-from config import _
 from dispatcher import bot
+from bot.extra.strings import _
 from bot.keyboards.keyboards import lang_kb
-from bot.database.requests import User, Chat, async_session
+from bot.database.requests import User, Chat
+from bot.database.models import async_session
 from bot.filters.filters import is_private, is_admin
-from bot.helpers import send_statistic, del_msg, check_events, ln
+from bot.extra.helpers import send_statistic, del_msg, check_events, ln
 from apiwca.wca_requests import get_wca_profile, parsed_users, search_users
 
 
@@ -17,7 +18,7 @@ router = Router()
 @router.message(CommandStart())
 async def greetings_handler(message: Message):
     user_id = message.from_user.id
-    
+
     async with async_session() as session:
         db = User(session)
         user = await db.get(user_id)
@@ -63,11 +64,12 @@ async def get_set_user_handler(message: Message):
 @router.message(Command('search'))
 async def search_users_handler(message: Message):
     query = ' '.join(message.text.split()[1:])
+    users = await search_users(query)
     lang = await ln(message)
 
-    if query:
+    if users:
         time = 600
-        resp = parsed_users(lang, await search_users(query))
+        resp = parsed_users(lang, users)
     else:
         time = 120
         resp = _.not_found[lang]

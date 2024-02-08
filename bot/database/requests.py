@@ -3,14 +3,19 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .models import UserModel as UserMd
 from .models import ChatModel as ChatMd
-from .models import async_session
 
 
-class User():
-    def __init__(self, session):
-        self.session: AsyncSession = session
+class DB:
+    session: AsyncSession
 
+    def __init__(self, session: AsyncSession):
+        self.session = session
+
+
+class User(DB):
     async def create(self, user_id: int, wca_id: str):
+        '''If chat exists, this method will update the user's wcaid
+        Else it will create user in database'''
         statement = select(UserMd).where(UserMd.user_id == user_id)
         user = (await self.session.execute(statement)).scalar()
         
@@ -22,19 +27,20 @@ class User():
             self.session.add(user)
         
         await self.session.commit()
+        await self.session.refresh(user)
 
     async def get(self, user_id: int) -> UserMd:
+        '''This method returns user'''
         statement = select(UserMd).where(UserMd.user_id == user_id)
         user = (await self.session.execute(statement)).scalar()
 
         return user
 
 
-class Chat():
-    def __init__(self, session):
-        self.session: AsyncSession = session
-
+class Chat(DB):
     async def create(self, chat_id: int, lang: str = 'en'):
+        '''If chat exists, this method will update the chat's language
+        Else it will create chat in database'''
         statement = select(ChatMd).where(ChatMd.chat_id == chat_id)
         resp = await self.session.execute(statement)
         chat = resp.scalar()
@@ -49,8 +55,8 @@ class Chat():
         await self.session.commit()
     
     async def get_lang(self, chat_id: int) -> ChatMd.lang:
+        '''This method returns chat language, if chat doesn't exist return "en"'''
         statement = select(ChatMd).where(ChatMd.chat_id == chat_id)
         chat = (await self.session.execute(statement)).scalar()
 
         return chat.lang if chat else 'en'
-    
