@@ -3,7 +3,7 @@ from aiogram.types import Message
 
 from config import _, events_list
 from .filters.filters import is_group
-from .database.requests import chat_db
+from .database.requests import Chat, async_session
 from apiwca.wca_requests import parsed_wca_profile, get_wca_profile
 
 
@@ -17,7 +17,7 @@ async def send_statistic(message: Message, profile: dict = None,
         await del_msg(msg)
         await del_msg(message)
         return None
-    print()
+    
     lang = await ln(message)
     photo_url = profile.get('photo_url')
     data = parsed_wca_profile(lang, profile, events)
@@ -45,8 +45,10 @@ async def del_msg(message: Message, time=120):
 
 async def ln(message: Message) -> str:
     chat_id = message.chat.id
-    db = await chat_db()
-    lang = await db.get_lang(chat_id)
+
+    async with async_session() as session:
+        db = Chat(session)
+        lang = await db.get_lang(chat_id)
 
     return lang
 

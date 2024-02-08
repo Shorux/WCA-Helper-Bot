@@ -5,7 +5,7 @@ from aiogram.filters import Command, CommandStart
 from config import _
 from dispatcher import bot
 from bot.keyboards.keyboards import lang_kb
-from bot.database.requests import user_db, chat_db
+from bot.database.requests import User, Chat, async_session
 from bot.filters.filters import is_private, is_admin
 from bot.helpers import send_statistic, del_msg, check_events, ln
 from apiwca.wca_requests import get_wca_profile, parsed_users, search_users
@@ -16,9 +16,11 @@ router = Router()
 
 @router.message(CommandStart())
 async def greetings_handler(message: Message):
-    db = await user_db()
     user_id = message.from_user.id
-    user = await db.get(user_id)
+    
+    async with async_session() as session:
+        db = User(session)
+        user = await db.get(user_id)
 
     if user and user.wca_id:
         await send_statistic(message, wca_id=user.wca_id)
@@ -40,8 +42,9 @@ async def get_set_user_handler(message: Message):
 
     if message.text.startswith('/set'):
         if profile:
-            db = await user_db()
-            await db.create(message.from_user.id, wca_id)
+            async with async_session() as session:
+                db = User(session)
+                await db.create(message.from_user.id, wca_id)
 
             time = 600
             msg = await message.reply(_.register_wcaid[await ln(message)])
@@ -78,8 +81,9 @@ async def get_me_handler(message: Message):
     events = check_events(message.text.split()[1:])
     user_id = message.from_user.id
 
-    db = await user_db()
-    user = await db.get(user_id)
+    async with async_session() as session:
+        db = User(session)
+        user = await db.get(user_id)
 
     if user and user.wca_id:
         msg = await send_statistic(message, wca_id=user.wca_id, events=events)
@@ -102,10 +106,13 @@ async def set_language(message: Message):
 
 @router.callback_query(F.data.startswith('lang_'))
 async def lang_callback(callback: CallbackQuery):
-    db = await chat_db()
+    
     lang = callback.data[-2:]
     message = callback.message
 
-    await db.create(message.chat.id, lang)
+    async with async_session() as session:
+        db = Chat(session)
+        await db.create(message.chat.id, lang)
+
     await bot.delete_message(message.chat.id, message.message_id)
     await del_msg(await message.answer(_.lang_registred[lang]), 10)
