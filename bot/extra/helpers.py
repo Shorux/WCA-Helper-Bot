@@ -3,7 +3,7 @@ from aiogram.types import Message
 
 from .strings import _, events_list
 from bot.filters.filters import is_group
-from bot.database.requests import Chat
+from bot.database.requests import Chats
 from bot.database.models import async_session
 from apiwca.wca_requests import parsed_wca_profile, get_wca_profile
 
@@ -51,7 +51,7 @@ async def ln(message: Message) -> str:
     chat_id = message.chat.id
 
     async with async_session() as session:
-        db = Chat(session)
+        db = Chats(session)
         lang = await db.get_lang(chat_id)
 
     return lang

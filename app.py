@@ -10,7 +10,7 @@ from bot.database.models import init_database
 
 def start_logging():
     if config.DEBUG:
-        logging.basicConfig(level=logging.DEBUG)
+        logging.basicConfig(level=logging.INFO)
         return
 
     if not os.path.isdir('logs'):

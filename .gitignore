@@ -1,0 +1,9 @@
+# Files
+.env
+*.sqlite3
+
+# Directories
+__pycache__
+.venv
+logs
+tests

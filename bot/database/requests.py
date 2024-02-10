@@ -12,7 +12,8 @@ class DB:
         self.session = session
 
 
-class User(DB):
+class Users(DB):
+    '''This class is for managing the 'users' table'''
     async def create(self, user_id: int, wca_id: str):
         '''If chat exists, this method will update the user's wcaid
         Else it will create user in database'''
@@ -37,7 +38,8 @@ class User(DB):
         return user
 
 
-class Chat(DB):
+class Chats(DB):
+    '''This class is for managing the 'chats' table'''
     async def create(self, chat_id: int, lang: str = 'en'):
         '''If chat exists, this method will update the chat's language
         Else it will create chat in database'''

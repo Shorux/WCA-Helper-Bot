@@ -5,8 +5,8 @@ from aiogram.filters import Command, CommandStart
 from dispatcher import bot
 from bot.extra.strings import _
 from bot.keyboards.keyboards import lang_kb
-from bot.database.requests import User, Chat
 from bot.database.models import async_session
+from bot.database.requests import Users, Chats
 from bot.filters.filters import is_private, is_admin
 from bot.extra.helpers import send_statistic, del_msg, check_events, ln
 from apiwca.wca_requests import get_wca_profile, parsed_users, search_users
@@ -20,7 +20,7 @@ async def greetings_handler(message: Message):
     user_id = message.from_user.id
 
     async with async_session() as session:
-        db = User(session)
+        db = Users(session)
         user = await db.get(user_id)
 
     if user and user.wca_id:
@@ -44,7 +44,7 @@ async def get_set_user_handler(message: Message):
     if message.text.startswith('/set'):
         if profile:
             async with async_session() as session:
-                db = User(session)
+                db = Users(session)
                 await db.create(message.from_user.id, wca_id)
 
             time = 600
@@ -84,7 +84,7 @@ async def get_me_handler(message: Message):
     user_id = message.from_user.id
 
     async with async_session() as session:
-        db = User(session)
+        db = Users(session)
         user = await db.get(user_id)
 
     if user and user.wca_id:
@@ -113,7 +113,7 @@ async def lang_callback(callback: CallbackQuery):
     message = callback.message
 
     async with async_session() as session:
-        db = Chat(session)
+        db = Chats(session)
         await db.create(message.chat.id, lang)
 
     await bot.delete_message(message.chat.id, message.message_id)
