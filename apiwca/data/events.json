@@ -1,0 +1,86 @@
+{
+  "222": {
+    "name": "2x2x2 Cube",
+    "format": "time"
+  },
+  "333bf": {
+  "name": "3x3x3 Blindfolded",
+  "format": "time"
+  },
+  "333": {
+    "name": "3x3x3 Cube",
+    "format": "time"
+  },
+  "333fm": {
+    "name": "3x3x3 Fewest Moves",
+    "format": "number"
+  },
+  "333mbf": {
+    "name": "3x3x3 Multi-Blind",
+    "format": "multi"
+  },
+  "333mbo": {
+    "name": "3x3x3 Multi-Blind Old Style",
+    "format": "multi"
+  },
+  "333oh": {
+    "name": "3x3x3 One-Handed",
+    "format": "time"
+  },
+  "333ft": {
+    "name": "3x3x3 With Feet",
+    "format": "time"
+  },
+  "444bf": {
+    "name": "4x4x4 Blindfolded",
+    "format": "time"
+  },
+  "444": {
+    "name": "4x4x4 Cube",
+    "format": "time"
+  },
+  "555bf": {
+    "name": "5x5x5 Blindfolded",
+    "format": "time"
+  },
+  "555": {
+    "name": "5x5x5 Cube",
+    "format": "time"
+  },
+  "666": {
+    "name": "6x6x6 Cube",
+    "format": "time"
+  },
+  "777": {
+    "name": "7x7x7 Cube",
+    "format": "time"
+  },
+  "clock": {
+    "name": "Clock",
+    "format": "time"
+  },
+  "magic": {
+    "name": "Magic",
+    "format": "time"
+  },
+  "mmagic": {
+    "name": "Master Magic",
+    "format": "time"
+  },
+  "minx": {
+    "name": "Megaminx",
+    "format": "time"
+  },
+  "pyram": {
+    "name": "Pyraminx",
+    "format": "time"
+  },
+  "skewb": {
+    "name": "Skewb",
+    "format": "time"
+  },
+  "sq1": {
+    "name": "Square-1",
+    "format": "time"
+  }
+}

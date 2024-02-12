@@ -17,7 +17,7 @@ TOKEN='Сюда вставьте ваш токен бота'
 ```
 
 Далее в терминале находясь в каталоге с ботом запускаем:
-```python
+```cmd
 python3 -m venv .venv
 
 .venv\Scripts\activate #- для Windows;

@@ -1,42 +1,15 @@
+import general
+
 from aiohttp import ClientSession
 
+from helpers import *
 from bot.extra.strings import _
 
 
 BASE_URL = 'https://www.worldcubeassociation.org/api/v0'
 
 
-def get_time(mils: int) -> str:
-    mils_str = str(mils)[-2:]
-
-    mils *= 10
-    s, mils = divmod(mils, 1000)
-    m, s = divmod(s, 60)
-    h, m = divmod(m, 60)
-
-    return f"{m}:{s:02d}.{mils_str}" if m > 0 else f"{s}.{mils_str}"
-
-
-def set_res(res, event):
-    match event:
-        case '333fm':
-            return res if res < 100 else str(res)[:2]+'.'+str(res)[2:]
-        case '333fm':
-            res = str(res)
-
-            missed = int(res[-2:])
-            solved = 99 - int(res[:2]) + missed
-            total_cubes = solved + missed
-
-            time_s = int(res[2:-2])
-            minutes = time_s // 60
-            seconds = time_s % 60
-
-            return f'{solved}/{total_cubes} {minutes}:{seconds:02d}'
-    return get_time(res)
-
-
-def get_prs(lang: str, prs: dict, events: list = None) -> str:
+def get_prs_string(lang: str, prs: dict, events: list = None) -> str:
     pr = _.personal_record[lang]
     prs_string = ''
 
@@ -67,22 +40,9 @@ def parsed_wca_profile(lang: str, profile: dict, events: list = None) -> dict:
     person = profile.get('person')
     records = profile.get('records')
     medals = profile.get('medals')
-    personal_records = get_prs(lang, profile.get('personal_records'), events)
-    gender = person.get('gender')
-
-    if gender == 'm':
-        gender = '🧑'
-    elif gender == 'f':
-        gender = '👩'
-    else:
-        gender = '👤'
-
-    country = person.get('country')
-
-    if not country:
-        country = person.get('country_iso2')
-    else:
-        country = country.get('name')
+    gender = gender_emoji(person.get('gender'))
+    country = general.countries[person.get('country_iso2')]
+    prs_string = get_prs_string(lang, profile.get('personal_records'), events)
 
     data = {
         'name': person['name'],
@@ -95,30 +55,18 @@ def parsed_wca_profile(lang: str, profile: dict, events: list = None) -> dict:
         'bronze': medals['bronze'],
         'country': country,
         'gender': gender,
-        'personal_records': personal_records
+        'personal_records': prs_string
     }
 
-    return data
+    return _.statistic[lang].format(**data)
 
 
 def parsed_users(lang, users: list[dict]) -> str:
     users_str = _.finded_users[lang]
 
     for user in users:
-        gender = user.get('gender')
-        if gender == 'm':
-            gender = '🧑'
-        elif gender == 'f':
-            gender = '👩'
-        else:
-            gender = '👤'
-            
-        country = user.get('country')
-
-        if not country:
-            country = user.get('country_iso2')
-        else:
-            country = country.get('name')
+        gender = gender_emoji(user.get('gender'))
+        country = general.countries[user.get('country_iso2')]
 
         data = {
             'name': user['name'],
@@ -128,16 +76,16 @@ def parsed_users(lang, users: list[dict]) -> str:
         }
 
         users_str += _.user[lang].format(**data)
-    
+
     if lang == 'uz':
         users_str += _.follow
-    
+
     return users_str
 
 
 async def get_wca_profile(wca_id: str) -> dict | None:
     async with ClientSession(trust_env=True) as session:
-        async with session.get(BASE_URL+f'/persons/{wca_id}') as resp:
+        async with session.get(BASE_URL + f'/persons/{wca_id}') as resp:
             res = await resp.json()
 
             if res.get('error'):
@@ -151,14 +99,13 @@ async def get_wca_profile(wca_id: str) -> dict | None:
 async def search_users(query: str):
     if not query:
         return None
-    
+
     async with ClientSession(trust_env=True) as session:
         params = {'q': query, 'persons_table': 'true'}
-        async with session.get(BASE_URL+f'/search/users', params=params) as resp:
+        async with session.get(BASE_URL + f'/search/users', params=params) as resp:
             res = (await resp.json()).get('result')
 
             if len(res) > 10:
                 res = res[:10]
-                
+
             return res
-    

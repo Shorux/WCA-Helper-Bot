@@ -1,40 +1,36 @@
 import asyncio
 from aiogram.types import Message
 
-from .strings import _, events_list
-from bot.filters.filters import is_group
+from strings import _, events_list
 from bot.database.requests import Chats
 from bot.database.models import async_session
+from bot.filters.filters import is_group
 from apiwca.wca_requests import parsed_wca_profile, get_wca_profile
 
 
 async def send_statistic(message: Message, profile: dict = None,
                          wca_id: str = None, events: list = None):
+    lang = await ln(message)
+
     if wca_id:
         profile = await get_wca_profile(wca_id)
 
     if not profile:
-        msg = await message.reply(_.wrong_wcaid[await ln(message)])
+        msg = await message.reply(_.wrong_wcaid[lang])
         await del_msg(msg)
-        await del_msg(message)
-        return None
+        return await del_msg(message)
     
     if events:
         events = check_events(events)
     
     time = 600
-    lang = await ln(message)
-    data = parsed_wca_profile(lang, profile, events)
-    res_msg = _.statistic[lang].format(**data)
-
     photo_url = profile.get('photo_url')
-    if len(res_msg) < 1024:
-        msg = await message.reply_photo(photo=photo_url, caption=res_msg)
-    else:
-        msg = await message.reply_photo(photo=photo_url)
+    res_msg = parsed_wca_profile(lang, profile, events)
+
+    await del_msg(await message.reply_photo(photo=photo_url, caption=res_msg))
+    if len(res_msg) > 1024:
         await del_msg(await message.answer(res_msg), time)
 
-    await del_msg(msg, time)
     await del_msg(message, time)
 
 
