@@ -1,8 +1,8 @@
 import os
 import logging
 import asyncio
-
 import config
+
 from dispatcher import bot, dp
 from bot.handlers.handlers import router
 from bot.database.models import init_database

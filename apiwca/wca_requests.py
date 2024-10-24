@@ -1,8 +1,8 @@
-import general
+from . import general
 
 from aiohttp import ClientSession
 
-from helpers import *
+from .helpers import *
 from bot.extra.strings import _
 
 
@@ -36,7 +36,7 @@ def get_prs_string(lang: str, prs: dict, events: list = None) -> str:
     return prs_string
 
 
-def parsed_wca_profile(lang: str, profile: dict, events: list = None) -> dict:
+def parsed_wca_profile(lang: str, profile: dict, events: list = None) -> str:
     person = profile.get('person')
     records = profile.get('records')
     medals = profile.get('medals')

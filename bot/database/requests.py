@@ -31,7 +31,7 @@ class Users(DB):
         await self.session.refresh(user)
 
     async def get(self, user_id: int) -> UserMd:
-        '''This method returns user'''
+        """This method returns user"""
         statement = select(UserMd).where(UserMd.user_id == user_id)
         user = (await self.session.execute(statement)).scalar()
 
@@ -39,10 +39,10 @@ class Users(DB):
 
 
 class Chats(DB):
-    '''This class is for managing the 'chats' table'''
+    """This class is for managing the 'chats' table"""
     async def create(self, chat_id: int, lang: str = 'en'):
-        '''If chat exists, this method will update the chat's language
-        Else it will create chat in database'''
+        """If chat exists, this method will update the chat's language
+        Else it will create chat in database."""
         statement = select(ChatMd).where(ChatMd.chat_id == chat_id)
         resp = await self.session.execute(statement)
         chat = resp.scalar()
@@ -57,7 +57,7 @@ class Chats(DB):
         await self.session.commit()
     
     async def get_lang(self, chat_id: int) -> ChatMd.lang:
-        '''This method returns chat language, if chat doesn't exist return "en"'''
+        """This method returns chat language, if chat doesn't exist return "en\""""
         statement = select(ChatMd).where(ChatMd.chat_id == chat_id)
         chat = (await self.session.execute(statement)).scalar()
 

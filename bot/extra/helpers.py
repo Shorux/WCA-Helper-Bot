@@ -1,7 +1,7 @@
 import asyncio
 from aiogram.types import Message
 
-from strings import _, events_list
+from .strings import _, events_list
 from bot.database.requests import Chats
 from bot.database.models import async_session
 from bot.filters.filters import is_group
@@ -19,10 +19,10 @@ async def send_statistic(message: Message, profile: dict = None,
         msg = await message.reply(_.wrong_wcaid[lang])
         await del_msg(msg)
         return await del_msg(message)
-    
+
     if events:
         events = check_events(events)
-    
+
     time = 600
     photo_url = profile.get('photo_url')
     res_msg = parsed_wca_profile(lang, profile, events)
