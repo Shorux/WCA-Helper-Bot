@@ -1,23 +1,17 @@
-# import os
-# import logging
+import os
+import logging
 
-# from dotenv import load_dotenv
-# from distutils.util import strtobool
+from dotenv import load_dotenv
+from distutils.util import strtobool
 
 
-# load_dotenv()  # parse environment variables from .env file
+load_dotenv()  # parse environment variables from .env file
 
-# DEBUG = bool(strtobool(os.getenv('DEBUG', 'off')))
+DEBUG = bool(strtobool(os.getenv('DEBUG', 'off')))
 
-# BOT_TOKEN = os.getenv('BOT_TOKEN')
-# if not BOT_TOKEN:
-#     logging.error("BOT_TOKEN is not defined neither in .env file nor in environment variables")
-#     quit()
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+if not BOT_TOKEN:
+    logging.error("BOT_TOKEN is not defined neither in .env file nor in environment variables")
+    quit()
 
-# SQLALCHEMY_URL = os.getenv('SQLALCHEMY_URL')
-
-DEBUG = False
-
-BOT_TOKEN = '6834236151:AAE_AlE-2UfAkoJk9mCrBEAvWQ96lMuoERQ'
-
-SQLALCHEMY_URL = 'sqlite+aiosqlite:///./bot/database/db.sqlite3'
+SQLALCHEMY_URL = os.getenv('SQLALCHEMY_URL')
