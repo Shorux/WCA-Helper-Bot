@@ -15,4 +15,3 @@ if not BOT_TOKEN:
     quit()
 
 SQLALCHEMY_URL = os.getenv('SQLALCHEMY_URL')
-
