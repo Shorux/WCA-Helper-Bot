@@ -78,7 +78,7 @@ class _():
     }
     user = {
         'en': ('{gender}Name: {name}\n'
-               '       Country: {country}\n'
+               '       🏳️Country: {country}\n'
                '       🆔WCA ID: `{wcaid}`\n\n'),
         'ru': ('{gender}Имя: {name}\n'
                '       🏳️Страна: {country}\n'
