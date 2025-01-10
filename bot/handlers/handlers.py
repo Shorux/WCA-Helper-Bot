@@ -8,7 +8,7 @@ from bot.keyboards.keyboards import lang_kb
 from bot.database.models import async_session
 from bot.database.requests import Users, Chats
 from bot.filters.filters import is_private, is_admin
-from bot.extra.helpers import send_statistic, del_msg, ln
+from bot.extra.helpers import send_statistic, del_msg, check_events, ln
 from apiwca.wca_requests import get_wca_profile, parsed_users, search_users
 
 
@@ -31,13 +31,12 @@ async def greetings_handler(message: Message):
 
 @router.message(Command(commands=['get', 'set']))
 async def get_set_user_handler(message: Message):
-    lang = await ln(message)
-    split_msg = message.text.split()
+    splited_msg = message.text.split()
 
     try:
-        wca_id = split_msg[1].upper()
+        wca_id = splited_msg[1].upper()
     except:
-        await del_msg(await message.reply(_.wrong_wcaid[lang]))
+        await del_msg(await message.reply(_.wrong_wcaid[await ln(message)]))
         return await del_msg(message)
 
     profile = await get_wca_profile(wca_id)
@@ -49,15 +48,17 @@ async def get_set_user_handler(message: Message):
                 await db.create(message.from_user.id, wca_id)
 
             time = 600
-            msg = await message.reply(_.register_wcaid[lang])
+            msg = await message.reply(_.register_wcaid[await ln(message)])
         else:
             time = 120
-            msg = await message.reply(_.wrong_wcaid[lang])
+            msg = await message.reply(_.wrong_wcaid[await ln(message)])
 
         await del_msg(msg, time)
         await del_msg(message, time)
     elif message.text.startswith('/get'):
-        await send_statistic(message, profile, events=split_msg[2:])
+        events = check_events(splited_msg[2:]) 
+
+        await send_statistic(message, profile, events=events)
 
 
 @router.message(Command('search'))
@@ -72,15 +73,15 @@ async def search_users_handler(message: Message):
     else:
         time = 120
         resp = _.not_found[lang]
-
+    
     await del_msg(await message.reply(resp), time)
     await del_msg(message, time)
 
 
 @router.message(Command('me'))
 async def get_me_handler(message: Message):
+    events = check_events(message.text.split()[1:])
     user_id = message.from_user.id
-    events = message.text.split()[1:]
 
     async with async_session() as session:
         db = Users(session)
@@ -101,12 +102,13 @@ async def get_me_handler(message: Message):
 async def set_language(message: Message):
     if is_private(message) or await is_admin(message):
         await message.reply(_.choose_lang[await ln(message)], reply_markup=lang_kb)
-
+    
     await del_msg(message, 1)
 
 
 @router.callback_query(F.data.startswith('lang_'))
 async def lang_callback(callback: CallbackQuery):
+    
     lang = callback.data[-2:]
     message = callback.message
 
