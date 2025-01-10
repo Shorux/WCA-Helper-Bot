@@ -1,7 +1,6 @@
-events_list = ('222', '333', '333fm', '333mbf', '333bf', '333oh', '444', '444bf',
-               '555', '555bf', '666', '777', 'clock', 'skewb',
-               'pyram', 'minx',
-               'sq1', '333ft')
+events_list = ('222', '333', '333fm', '333mbf', '333bf', '333oh', '444',
+               '444bf', '555', '555bf', '666', '777', 'clock',
+               'skewb', 'pyram', 'minx', 'sq1', '333ft')
 
 
 class _():
@@ -80,16 +79,16 @@ class _():
     user = {
         'en': ('{gender}Name: {name}\n'
                '       Country: {country}\n'
-               '       🆔WCA ID: {wcaid}\n\n'),
+               '       🆔WCA ID: `{wcaid}`\n\n'),
         'ru': ('{gender}Имя: {name}\n'
                '       🏳️Страна: {country}\n'
-               '       🆔WCA ID: {wcaid}\n\n'),
+               '       🆔WCA ID: `{wcaid}`\n\n'),
         'uz': ('{gender}Ism: {name}\n'
                '       🏳️Mamlakat: {country}\n'
-               '       🆔WCA ID: {wcaid}\n\n'),
+               '       🆔WCA ID: `{wcaid}`\n\n'),
         'kz': ('{gender}Аты: {name}\n'
                '       🏳️Мемлекет: {country}\n'
-               '       🆔WCA ID: {wcaid}\n\n')
+               '       🆔WCA ID: `{wcaid}`\n\n')
     }
     not_found = {
         'en': 'No such speedcubers found🍼',
