@@ -71,7 +71,7 @@ class _():
         'kz': '🍼*{event} дисциплинасы*:'
     }
     finded_users = {
-        'en': '👥Finded speedcubers:',
+        'en': '👥Finded speedcubers:\n',
         'ru': '👥Найденные спидкуберы:\n',
         'uz': '👥Topilgan spidkuberlar:\n',
         'kz': '👥Табылған спидкуберлер тізімі:\n'
