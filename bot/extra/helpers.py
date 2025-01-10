@@ -9,7 +9,7 @@ from apiwca.wca_requests import parsed_wca_profile, get_wca_profile
 
 
 async def send_statistic(message: Message, profile: dict = None,
-                         wca_id: str = None, events: list = None):
+                         wca_id: str = None, events: list = None) -> None:
     lang = await ln(message)
 
     if wca_id:
@@ -27,14 +27,15 @@ async def send_statistic(message: Message, profile: dict = None,
     photo_url = profile.get('photo_url')
     res_msg = parsed_wca_profile(lang, profile, events)
 
-    await del_msg(await message.reply_photo(photo=photo_url, caption=res_msg))
-    if len(res_msg) > 1024:
+    if len(res_msg) > 1020:
+        await del_msg(await message.reply_photo(photo=photo_url), time)
         await del_msg(await message.answer(res_msg), time)
-
+    else:
+        await del_msg(await message.reply_photo(photo=photo_url, caption=res_msg), time)
     await del_msg(message, time)
 
 
-async def del_msg(message: Message, time=120):
+async def del_msg(message: Message, time=120) -> None:
     try:
         if is_group(message):
             await asyncio.sleep(time)
@@ -53,6 +54,5 @@ async def ln(message: Message) -> str:
     return lang
 
 
-def check_events(events: list):
-    events = [event for event in events if event in events_list]
-    return events
+def check_events(events: list) -> list:
+    return [event for event in events if event in events_list]
