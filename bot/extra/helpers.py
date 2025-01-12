@@ -1,5 +1,5 @@
 import asyncio
-from aiogram.types import Message
+from aiogram.types import Message, InputMediaPhoto
 
 from .strings import _, events_list
 from bot.database.requests import Chats
@@ -28,8 +28,8 @@ async def send_statistic(message: Message, profile: dict = None,
     res_msg = parsed_wca_profile(lang, profile, events)
 
     if len(res_msg) > 1020:
-        await del_msg(await message.reply_photo(photo=photo_url), time)
-        asyncio.sleep(0.1)
+        media_msg = InputMediaPhoto(media=photo_url)
+        await del_msg(await message.reply_media_group(media=media_msg), time)
         await del_msg(await message.answer(res_msg), time)
     else:
         await del_msg(await message.reply_photo(photo=photo_url, caption=res_msg), time)
