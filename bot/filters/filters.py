@@ -3,7 +3,9 @@ from aiogram.types import Message
 from dispatcher import bot
 
 
-def is_group(message: Message):
+def is_group(message: Message | list[Message]):
+    if isinstance(message, list):
+        message = message[0]
     return message.chat.type == 'group' or message.chat.type == 'supergroup'
 
 

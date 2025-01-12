@@ -65,10 +65,10 @@ class _():
                '            NR: {country_rank}, CR: {continent_rank}, WR: {world_rank}')
     }
     event = {
-        'en': '🍼*Event {event}*:',
-        'ru': '🍼*Дисциплина {event}*:',
-        'uz': '🍼*{event} yo\'nalishi*:',
-        'kz': '🍼*{event} дисциплинасы*:'
+        'en': '⏱️*Event {event}*:',
+        'ru': '⏱️*Дисциплина {event}*:',
+        'uz': '⏱️*{event} yo\'nalishi*:',
+        'kz': '⏱️*{event} дисциплинасы*:'
     }
     finded_users = {
         'en': '👥Finded speedcubers:\n',

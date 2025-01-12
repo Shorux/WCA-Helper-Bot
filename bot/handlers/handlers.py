@@ -8,7 +8,7 @@ from bot.keyboards.keyboards import lang_kb
 from bot.database.models import async_session
 from bot.database.requests import Users, Chats
 from bot.filters.filters import is_private, is_admin
-from bot.extra.helpers import send_statistic, del_msg, ln
+from bot.extra.helpers import send_statistic, del_msg, ln, handle_set_command
 from apiwca.wca_requests import get_wca_profile, parsed_users, search_users
 
 
@@ -36,31 +36,21 @@ async def get_set_user_handler(message: Message):
 
     try:
         wca_id = split_msg[1].upper()
+        profile = await get_wca_profile(wca_id)
     except:
         await del_msg(await message.reply(_.wrong_wcaid[lang]))
         return await del_msg(message)
 
-    profile = await get_wca_profile(wca_id)
 
     if message.text.startswith('/set'):
-        if profile:
-            async with async_session() as session:
-                db = Users(session)
-                await db.create(message.from_user.id, wca_id)
+        msg = await handle_set_command(message, wca_id, profile, lang)
 
-            time = 600
-            msg = await message.reply(_.register_wcaid[lang])
-        else:
-            time = 120
-            msg = await message.reply(_.wrong_wcaid[lang])
-
-        await del_msg(msg, time)
-        await del_msg(message, time)
+        await del_msg(await message.reply(msg), 600 if profile else 120)
     elif message.text.startswith('/get'):
-        await send_statistic(message, profile, events=split_msg[2:])
+        await send_statistic(message, profile, events=message.text.split()[2:], lang=lang)
 
 
-@router.message(Command('search'))
+@router.message(Command(commands=['search', 'qidirish']))
 async def search_users_handler(message: Message):
     query = ' '.join(message.text.split()[1:])
     users = await search_users(query)
@@ -77,24 +67,20 @@ async def search_users_handler(message: Message):
     await del_msg(message, time)
 
 
-@router.message(Command('me'))
+@router.message(Command(commands=['me', 'men']))
 async def get_me_handler(message: Message):
-    user_id = message.from_user.id
-    events = message.text.split()[1:]
-
     async with async_session() as session:
         db = Users(session)
-        user = await db.get(user_id)
+        user = await db.get(message.from_user.id)
 
     if user and user.wca_id:
-        msg = await send_statistic(message, wca_id=user.wca_id, events=events)
+        msg = await send_statistic(message, wca_id=user.wca_id, events=message.text.split()[1:])
         time = 600
     else:
         msg = await message.reply(_.please_set_wcaid[await ln(message)])
         time = 120
 
-    await del_msg(message, time)
-    await del_msg(msg, time)
+    await del_msg([msg, message], time)
 
 
 @router.message(Command('lang'))

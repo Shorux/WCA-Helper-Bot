@@ -56,7 +56,7 @@ class Chats(DB):
         
         await self.session.commit()
     
-    async def get_lang(self, chat_id: int) -> ChatMd.lang:
+    async def get_lang(self, chat_id: int) -> str:
         """This method returns chat language, if chat doesn't exist return "en\""""
         statement = select(ChatMd).where(ChatMd.chat_id == chat_id)
         chat = (await self.session.execute(statement)).scalar()
