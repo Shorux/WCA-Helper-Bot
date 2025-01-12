@@ -13,4 +13,4 @@ def is_private(message: Message):
 
 async def is_admin(message: Message):
     member = await bot.get_chat_member(message.chat.id, message.from_user.id)
-    return member.status == 'administrator'
+    return member.status in ['administrator', 'creator']
