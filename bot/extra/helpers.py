@@ -29,9 +29,8 @@ async def send_statistic(message: Message, profile: dict = None,
         InputMediaPhoto(media=photo_url)
     ]
     res_msg = parsed_wca_profile(lang, profile, events)
-    print(len(res_msg))
 
-    if len(res_msg) > 1020:
+    if len(res_msg) > 1024:
         trash.append(await message.reply_media_group(media=media_msg))
         trash.append(await message.answer(res_msg))
     else:
