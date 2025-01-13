@@ -31,14 +31,14 @@ async def send_statistic(message: Message, profile: dict = None,
 
     if len(res_msg) > 1020:
         trash.append(await message.reply_media_group(media=media_msg))
-        trash.append(await message.answer(res_msg), time)
+        trash.append(await message.answer(res_msg))
     else:
-        trash.append(await message.reply_media_group(media=media_msg, caption=res_msg), time)
+        trash.append(await message.reply_media_group(media=media_msg, caption=res_msg))
 
     await del_msg(trash, time)
 
 
-async def handle_set_command(message: Message, wca_id: str, profile: dict, lang: str) -> Message:
+async def handle_set_command(message: Message, wca_id: str, profile: dict, lang: str) -> str:
     if profile:
         async with async_session() as session:
             db = Users(session)
