@@ -29,6 +29,7 @@ async def send_statistic(message: Message, profile: dict = None,
         InputMediaPhoto(media=photo_url)
     ]
     res_msg = parsed_wca_profile(lang, profile, events)
+    print(len(res_msg))
 
     if len(res_msg) > 1020:
         trash.append(await message.reply_media_group(media=media_msg))
@@ -51,12 +52,12 @@ async def handle_set_command(message: Message, wca_id: str, profile: dict, lang:
 
 async def del_msg(message: Message | list[Message] | None, time=120) -> None:
     try:
-        if is_group(message):
-            await asyncio.sleep(time)
+        await asyncio.sleep(time)
 
-            if isinstance(message, list):
-                await asyncio.wait([msg.delete() for msg in message])
-            else:
+        if isinstance(message, list):
+            await asyncio.wait([msg.delete() for msg in message if is_group(msg)])
+        else:
+            if is_group(message):
                 await message.delete()
     except Exception as e:
         print(f"Error deleting message: {e}")
