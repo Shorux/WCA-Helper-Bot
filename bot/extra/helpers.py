@@ -24,8 +24,9 @@ async def send_statistic(message: Message, profile: dict = None,
 
     time = 600
     trash = []
+    photo_url = profile.get('photo_url')
     media_msg = [
-        InputMediaPhoto(media=profile.get('photo_url'))
+        InputMediaPhoto(media=photo_url)
     ]
     res_msg = parsed_wca_profile(lang, profile, events)
 
@@ -33,7 +34,7 @@ async def send_statistic(message: Message, profile: dict = None,
         trash.append(await message.reply_media_group(media=media_msg))
         trash.append(await message.answer(res_msg))
     else:
-        trash.append(await message.reply_media_group(media=media_msg, caption=res_msg))
+        trash.append(await message.reply_photo(photo=photo_url, caption=res_msg))
 
     await del_msg(trash, time)
 
