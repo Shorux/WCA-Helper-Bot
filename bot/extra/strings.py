@@ -54,15 +54,15 @@ class _():
                '       🥇: {gold}, 🥈: {silver}, 🥉: {bronze}\n\n'
                '🏆*Жеке рекордтар*:\n{personal_records}'),
     }
+    # pr = ('\n        {type} 🫴  *{best}* ⚡️\n'
+    #            '            NR: {country_rank}, CR: {continent_rank}, WR: {world_rank}')
+    pr = ('\n   {type} 🫴  *{best}* ⚡️\n'
+          '      NR: {country_rank} | CR: {continent_rank} | WR: {world_rank}\n')
     personal_record = {
-        'en': ('\n        {type} 🫴  *{best}* ⚡️\n'
-               '            NR: {country_rank}, CR: {continent_rank}, WR: {world_rank}'),
-        'ru': ('\n        {type} 🫴  *{best}* ⚡️\n'
-               '            NR: {country_rank}, CR: {continent_rank}, WR: {world_rank}'),
-        'uz': ('\n        {type} 🫴  *{best}* ⚡️\n'
-               '            NR: {country_rank}, CR: {continent_rank}, WR: {world_rank}'),
-        'kz': ('\n        {type} 🫴  *{best}* ⚡️\n'
-               '            NR: {country_rank}, CR: {continent_rank}, WR: {world_rank}')
+        'en': pr,
+        'ru': pr,
+        'uz': pr,
+        'kz': pr
     }
     event = {
         'en': '⏱️*Event {event}*:',

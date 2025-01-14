@@ -31,7 +31,7 @@ def get_prs_string(lang: str, prs: dict, events: list = None) -> str:
             single['best'] = set_res(single['best'], event)
             string += pr.format(**single)
 
-        prs_string += string + '\n\n'
+        prs_string += string + '-' * 65 + '\n\n'
 
     return prs_string
 
