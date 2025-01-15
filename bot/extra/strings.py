@@ -54,10 +54,9 @@ class _():
                '       🥇: {gold}, 🥈: {silver}, 🥉: {bronze}\n\n'
                '🏆*Жеке рекордтар*:\n{personal_records}'),
     }
-    # pr = ('\n        {type} 🫴  *{best}* ⚡️\n'
-    #            '            NR: {country_rank}, CR: {continent_rank}, WR: {world_rank}')
-    pr = ('\n   {type} 🫴  *{best}* ⚡️\n'
-          '      NR: {country_rank} | CR: {continent_rank} | WR: {world_rank}\n')
+    
+    pr = ('\n   {type} - *{best}*\n'
+          '      NR: {country_rank} | CR: {continent_rank} | WR: {world_rank}\n\n')
     personal_record = {
         'en': pr,
         'ru': pr,
@@ -65,10 +64,10 @@ class _():
         'kz': pr
     }
     event = {
-        'en': '⏱️*Event {event}*:',
-        'ru': '⏱️*Дисциплина {event}*:',
-        'uz': '⏱️*{event} yo\'nalishi*:',
-        'kz': '⏱️*{event} дисциплинасы*:'
+        'en': '⏱️*Event {event}*:\n',
+        'ru': '⏱️*Дисциплина {event}*:\n',
+        'uz': '⏱️*{event} yo\'nalishi*:\n',
+        'kz': '⏱️*{event} дисциплинасы*:\n'
     }
     finded_users = {
         'en': '👥Finded speedcubers:\n',
