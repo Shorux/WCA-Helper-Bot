@@ -7,20 +7,20 @@ class _():
     follow = '@Speedcubes\_uz kanaliga obuna bo\'ling!'
     please_set_wcaid = {
         'en': ('You need to register your WCA ID with the command:\n'
-               '`/set` wca\_id\n'
-               'Instead of wca\_id write your WCA ID\n'
+               '`/set` 2021TOLI01\n'
+               'Instead of 2021TOLI01 write your WCA ID\n'
                'Then you can use the command `/me`'),
         'ru': ('Тебе нужно зарегистрировать свой WCA ID с помощью команды:\n'
-               '`/set` wca\_id\n'
-               'Вместо wca\_id напиши свой WCA ID\n'
+               '`/set` 2021TOLI01\n'
+               'Вместо 2021TOLI01 напиши свой WCA ID\n'
                'Потом можно использовать команду `/me`'),
         'uz': ('Ushbu komanda bilan o\'zingizni WCA ID\'izni registratsiya qilishingiz kerak:\n'
-               '`/set` wca\_id\n'
-               'wca\_id\'ni o\'rniga WCA ID\'izni yozin\n'
+               '`/set` 2021TOLI01\n'
+               '2021TOLI01\'ni o\'rniga WCA ID\'izni yozin\n'
                'Keyin `/me` komandasini ishlatsangiz bo\'ladi\n'
                f'{follow}'),
-        'kz': ('Сізге `/set` wca\_id командасы арқылы WCA ID-ңізді тіркеу керек\n'
-               'wca\_id сөзінің орнына өзіңіздің WCA ID-ңізді жазыңыз\n'
+        'kz': ('Сізге `/set` 2021TOLI01 командасы арқылы WCA ID-ңізді тіркеу керек\n'
+               '2021TOLI01 сөзінің орнына өзіңіздің WCA ID-ңізді жазыңыз\n'
                'Осыдан кейін `/me` командасын қолдануға болады')
     }
     statistic = {
@@ -54,7 +54,6 @@ class _():
                '       🥇: {gold}, 🥈: {silver}, 🥉: {bronze}\n\n'
                '🏆*Жеке рекордтар*:\n{personal_records}'),
     }
-    
     pr = ('   {type} - *{best}*\n'
           '      NR: {country_rank} | CR: {continent_rank} | WR: {world_rank}\n\n')
     personal_record = {
